@@ -1,11 +1,22 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { horizontalScale, verticalScale } from "../utils/Dimensions";
+import { useFonts } from "expo-font";
 
 // horizontal scroll
 
 const BigCard = ({ card }) => {
   const [pressing, setPressing] = useState(false);
+
+  const [fontsLoaded] = useFonts({
+    "Spotify-Bold": require("../assets/fonts/Gotham-Bold.otf"),
+    "Spotify-Light": require("../assets/fonts/Gotham-Light.otf"),
+    "s-m": require("../assets/fonts/Gotham-Medium.ttf"),
+    "s-b": require("../assets/fonts/Gotham-Book.ttf"),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <TouchableOpacity
       activeOpacity={0.5}
@@ -25,7 +36,12 @@ const BigCard = ({ card }) => {
         source={card.image}
       ></Image>
       <Text
-        style={{ color: "rgba(167,167,167, 1)", marginTop: verticalScale(6) }}
+        style={{
+          color: "rgba(167,167,167, 1)",
+          marginTop: verticalScale(6),
+          fontSize: horizontalScale(13),
+          fontFamily: "s-b",
+        }}
       >
         {card.title}
       </Text>

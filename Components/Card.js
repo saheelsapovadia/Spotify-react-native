@@ -14,18 +14,29 @@ import {
   verticalScale,
   moderateScale,
 } from "../utils/Dimensions";
+import { useFonts } from "expo-font";
 
 // how to give dynamic font sizes
 
 const Card = ({ image, title }) => {
   const [pressing, setPressing] = useState(false);
   const size = PixelRatio.getPixelSizeForLayoutSize();
+
+  const [fontsLoaded] = useFonts({
+    "Spotify-Bold": require("../assets/fonts/Gotham-Bold.otf"),
+    "Spotify-Light": require("../assets/fonts/Gotham-Light.otf"),
+    "s-m": require("../assets/fonts/Gotham-Medium.ttf"),
+    "s-b": require("../assets/fonts/Gotham-Book.ttf"),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <TouchableOpacity
       activeOpacity={0.5}
       style={{
         flexDirection: "row",
-        height: verticalScale(60),
+        height: verticalScale(55),
         // height: 60,
         width: "48%",
         transform: [{ scale: pressing ? 0.99 : 1 }],
@@ -41,7 +52,7 @@ const Card = ({ image, title }) => {
         */}
       <Image
         style={{
-          height: verticalScale(60),
+          height: verticalScale(55),
           // height: 60,
           borderBottomLeftRadius: 6,
           borderTopLeftRadius: 6,
@@ -64,7 +75,8 @@ const Card = ({ image, title }) => {
           style={{
             color: "white",
             marginLeft: 15,
-            fontSize: verticalScale(15),
+            fontSize: verticalScale(13),
+            fontFamily: "s-m",
           }}
         >
           {title}

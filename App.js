@@ -7,25 +7,37 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { verticalScale } from "./utils/Dimensions";
 import { LinearGradient } from "expo-linear-gradient";
 import Search from "./Search";
-import { Text, View } from "react-native";
+import MusicContextProvider from "./Components/MusicContext/MusicContext";
+import { ThemeContext, ThemeContextProvider } from "./utils/ThemeContext";
+import { useContext } from "react";
 
-// Improve asthetics design, animation later on - 17
-// deadline sunday search screen and beta launch on github and linkedin
+// Improve asthetics design, animation later on - 18
+// deadline saturday 2pm search screen and beta launch on github and linkedin after 5km run
 // resume addition
 
-// Media player on bottom tabs
-
 // UNIFORM margin padding to all screen
-// Botton margin to acc. tab bar
 
-const GREEN_COLOR = "rgba(30,215,96,1)";
-const GREY_COLOR = "rgba(127,127,127,1)";
+// Add screen fade in animations
+// media player interactions
+
 const LINEAR_GRADIENT_BLACK_START = "rgba(17,17,17,1)";
 const LINEAR_GRADIENT_BLACK_END = "rgba(17,17,17,0.7)";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  return (
+    <ThemeContextProvider>
+      <MusicContextProvider>
+        <Navigation />
+      </MusicContextProvider>
+    </ThemeContextProvider>
+  );
+}
+
+const Navigation = () => {
+  const themeContext = useContext(ThemeContext);
+  console.log(themeContext.bottomtabs);
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -48,8 +60,8 @@ export default function App() {
               />
             );
           },
-          tabBarActiveTintColor: GREEN_COLOR,
-          tabBarInactiveTintColor: GREY_COLOR,
+          tabBarActiveTintColor: themeContext.bottomtabs.active,
+          tabBarInactiveTintColor: themeContext.bottomtabs.inactive,
           tabBarStyle: {
             position: "absolute",
             backgroundColor: "transparent",
@@ -77,18 +89,11 @@ export default function App() {
             ></LinearGradient>
           ),
         })}
-        // tabBar={() => {
-        //   return (
-        //     <View>
-        //       <Text>Media</Text>
-        //     </View>
-        //   );
-        // }}
       >
-        <Tab.Screen name="Search" component={Search} />
         <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Search" component={Search} />
         <Tab.Screen name="YourLibrary" component={YourLibrary} />
       </Tab.Navigator>
     </NavigationContainer>
   );
-}
+};
