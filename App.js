@@ -36,7 +36,7 @@ export default function App() {
 }
 
 const Navigation = () => {
-  const themeContext = useContext(ThemeContext);
+  const themeContext = useContext(ThemeContext).theme;
   console.log(themeContext.bottomtabs);
   return (
     <NavigationContainer>

@@ -1,20 +1,20 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import React, { useContext } from "react";
-import { useFonts } from "expo-font";
 import { horizontalScale, verticalScale } from "./utils/Dimensions";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MusicControlPanel from "./Components/MusicControlPanel";
 import { ThemeContext } from "./utils/ThemeContext";
+import Text from "./Abstracts/Text";
 
 // Desgin the cards with images
 // Data is ready, add basic 6 cards
 const Search = () => {
-  const themeContext = useContext(ThemeContext);
+  const themeContext = useContext(ThemeContext).theme;
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
-        style={{ flex: 1, backgroundColor: "#1E1E1E" }}
+        style={[{ flex: 1 }, { ...themeContext.screens }]}
         contentContainerStyle={{ flexGrow: 1 }}
       >
         <Text

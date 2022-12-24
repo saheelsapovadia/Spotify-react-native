@@ -1,6 +1,6 @@
 import { horizontalScale, verticalScale } from "../utils/Dimensions";
 
-const palette = {
+const darkPalette = {
   SWIPE_GREEN_COLOR: "rgba(30,215,96,1)",
   SWIPE_GREY_COLOR: "rgba(127,127,127,1)",
   GREEN_COLOR: "rgba(30,215,96,1)",
@@ -15,6 +15,35 @@ const palette = {
   LINEAR_GRADIENT_PURPLE: "#3F13BE",
 };
 
+const lightPalette = {
+  SWIPE_GREEN_COLOR: "#FF8511",
+  SWIPE_GREY_COLOR: "rgba(127,127,127,1)",
+  GREEN_COLOR: "#FF8511",
+  GREY_COLOR: "rgba(127,127,127,1)",
+  LINEAR_GRADIENT_BLACK_START: "rgba(17,17,17,1)",
+  LINEAR_GRADIENT_BLACK_END: "rgba(17,17,17,0.7)",
+  BORDER_COLOR: "rgba(127,127,127,1)",
+  SELECTED_BACKGROUND_COLOR: "rgba(255,133,17,1)",
+  SELECTED_BORDER_COLOR: "rgba(255,107,0,1)",
+  SELECTED_2_BACKGROUND_COLOR: "#DF7130",
+  SCREEN_BACKGROUND: "#F5F2F2",
+  LINEAR_GRADIENT_PURPLE: "#DC5C00",
+};
+// const lightPalette = {
+//   SWIPE_GREEN_COLOR: "#FF8511",
+//   SWIPE_GREY_COLOR: "rgba(127,127,127,1)",
+//   GREEN_COLOR: "#FF8511",
+//   GREY_COLOR: "rgba(127,127,127,1)",
+//   LINEAR_GRADIENT_BLACK_START: "rgba(17,17,17,1)",
+//   LINEAR_GRADIENT_BLACK_END: "rgba(17,17,17,0.7)",
+//   BORDER_COLOR: "rgba(127,127,127,1)",
+//   SELECTED_BACKGROUND_COLOR: "#FF8511",
+//   SELECTED_BORDER_COLOR: "#FF6B00",
+//   SELECTED_2_BACKGROUND_COLOR: "#DF7130",
+//   SCREEN_BACKGROUND: "#F5F2F2",
+//   LINEAR_GRADIENT_PURPLE: "#3F13BE",
+// };
+
 // import Font files here for the project
 const fonts = {
   SPOTIFY_BOLD: require("../assets/fonts/Gotham-Bold.otf"),
@@ -28,24 +57,55 @@ const fontSize = {
   S: horizontalScale(13),
 };
 
-// screen specific styles
-const theme = {
+const dark = {
+  screens: {
+    backgroundColor: darkPalette.SCREEN_BACKGROUND,
+  },
   bottomtabs: {
-    active: palette.GREEN_COLOR,
-    inactive: palette.GREY_COLOR,
+    active: darkPalette.GREEN_COLOR,
+    inactive: darkPalette.GREY_COLOR,
   },
   home: {
-    linearGradient: palette.LINEAR_GRADIENT_PURPLE,
-    background: palette.SCREEN_BACKGROUND,
+    linearGradient: darkPalette.LINEAR_GRADIENT_PURPLE,
+    background: darkPalette.SCREEN_BACKGROUND,
   },
   yourlibrary: {
-    pin: palette.SWIPE_GREEN_COLOR,
-    unpin: palette.SWIPE_GREY_COLOR,
-    filterBorder: palette.BORDER_COLOR,
-    selectedFilterBorder: palette.SELECTED_BORDER_COLOR,
-    selectedFilterBackground: palette.SELECTED_BACKGROUND_COLOR,
-    selectedSubFilterBackground: palette.SELECTED_2_BACKGROUND_COLOR,
+    pin: darkPalette.SWIPE_GREEN_COLOR,
+    unpin: darkPalette.SWIPE_GREY_COLOR,
+    filterBorder: darkPalette.BORDER_COLOR,
+    selectedFilterBorder: darkPalette.SELECTED_BORDER_COLOR,
+    selectedFilterBackground: darkPalette.SELECTED_BACKGROUND_COLOR,
+    selectedSubFilterBackground: darkPalette.SELECTED_2_BACKGROUND_COLOR,
   },
+};
+
+const light = {
+  text: {
+    color: "black",
+  },
+  screens: {
+    backgroundColor: lightPalette.SCREEN_BACKGROUND,
+  },
+  bottomtabs: {
+    active: lightPalette.GREEN_COLOR,
+    inactive: lightPalette.GREY_COLOR,
+  },
+  home: {
+    linearGradient: lightPalette.LINEAR_GRADIENT_PURPLE,
+    background: lightPalette.SCREEN_BACKGROUND,
+  },
+  yourlibrary: {
+    pin: lightPalette.SWIPE_GREEN_COLOR,
+    unpin: lightPalette.SWIPE_GREY_COLOR,
+    filterBorder: lightPalette.BORDER_COLOR,
+    selectedFilterBorder: lightPalette.SELECTED_BORDER_COLOR,
+    selectedFilterBackground: lightPalette.SELECTED_BACKGROUND_COLOR,
+    selectedSubFilterBackground: lightPalette.SELECTED_2_BACKGROUND_COLOR,
+  },
+};
+
+// screen specific styles
+const theme = {
   spacing: {
     screen: {
       height: verticalScale(90),
@@ -73,7 +133,13 @@ const theme = {
   },
 };
 
-export default Theme = {
+export const MagicTheme = {
+  ...light,
+  ...theme,
+  fonts,
+};
+export const DarkTheme = {
+  ...dark,
   ...theme,
   fonts,
 };

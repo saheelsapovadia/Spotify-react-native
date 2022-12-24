@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React, { createContext, useState } from "react";
 
 export const MusicContext = createContext();

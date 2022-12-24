@@ -1,8 +1,6 @@
 import {
   Image,
   ScrollView,
-  StyleSheet,
-  Text,
   View,
   StatusBar,
   TouchableOpacity,
@@ -27,6 +25,7 @@ import Animated, {
 
 import MusicControlPanel from "./Components/MusicControlPanel";
 import { ThemeContext } from "./utils/ThemeContext";
+import Text from "./Abstracts/Text";
 
 const BORDER_COLOR = "rgba(127,127,127,1)";
 const SELECTED_BACKGROUND_COLOR = "rgba(20,132,60,1)";
@@ -41,7 +40,8 @@ const SELECTED_2_BACKGROUND_COLOR = "rgba(19,97,47,1)";
 // deadline - 17 dec
 
 const YourLibrary = () => {
-  const themeContext = useContext(ThemeContext);
+  const themeContext = useContext(ThemeContext).theme;
+
   const [showModal, setShowModal] = useState(false);
   const [modalDetails, setModalDetails] = useState({
     artist: "Taylor Swift",
@@ -102,12 +102,15 @@ const YourLibrary = () => {
     const borderColor = interpolateColor(
       playlistAnimationProgress.value,
       [0, 1],
-      [BORDER_COLOR, SELECTED_BORDER_COLOR]
+      [
+        themeContext.yourlibrary.filterBorder,
+        themeContext.yourlibrary.selectedFilterBorder,
+      ]
     );
     const backgroundColor = interpolateColor(
       playlistAnimationProgress.value,
       [0, 1],
-      ["transparent", SELECTED_2_BACKGROUND_COLOR]
+      ["transparent", themeContext.yourlibrary.selectedSubFilterBackground]
     );
     return {
       borderColor,
@@ -120,16 +123,20 @@ const YourLibrary = () => {
     return filterActive ? 1 : 0;
   }, [filterActive]);
 
+  console.log("sasa", themeContext.yourlibrary);
   const filterOptionSelectedAnimation = useAnimatedStyle(() => {
     const borderColor = interpolateColor(
       animationProgress.value,
       [0, 1],
-      [BORDER_COLOR, SELECTED_BORDER_COLOR]
+      [
+        themeContext.yourlibrary.filterBorder,
+        themeContext.yourlibrary.selectedFilterBorder,
+      ]
     );
     const backgroundColor = interpolateColor(
       animationProgress.value,
       [0, 1],
-      ["transparent", SELECTED_BACKGROUND_COLOR]
+      ["transparent", themeContext.yourlibrary.selectedFilterBackground]
     );
 
     return {
@@ -141,7 +148,7 @@ const YourLibrary = () => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
-        style={{ flex: 1, backgroundColor: "#1E1E1E" }}
+        style={[{ flex: 1 }, { ...themeContext.screens }]}
         contentContainerStyle={{ flexGrow: 1 }}
       >
         <StatusBar translucent backgroundColor="transparent" />
@@ -417,12 +424,6 @@ const YourLibrary = () => {
             ) : (
               <></>
             )}
-            {/* <FilterCard
-              label={"Playlists"}
-              onFilterPress={onFilterPress}
-              filterActive={filterActive}
-              filterActiveMode={filterActiveMode}
-            /> */}
           </Animated.View>
         </View>
         <LibraryList
@@ -442,86 +443,4 @@ const YourLibrary = () => {
   );
 };
 
-const FilterCard = ({
-  label,
-  filterActive,
-  onFilterPress,
-  filterActiveMode,
-}) => {
-  const animationProgress = useDerivedValue(() => {
-    console.log("animation progress", filterActive);
-    return filterActive ? 1 : 0;
-  }, [filterActive]);
-
-  const width = useSharedValue("auto");
-
-  const [vWidth, setVWidth] = useState(0);
-  const measure = ({ nativeEvent }) => setVWidth(nativeEvent.layout.width);
-  useEffect(() => {
-    console.log(vWidth);
-  }, [vWidth]);
-
-  useEffect(() => {
-    if (filterActiveMode[label]) {
-      width.value = withTiming(vWidth, { duration: 200 });
-    } else {
-      width.value = withTiming(0, { duration: 200 });
-    }
-  }, [filterActiveMode]);
-
-  const filterOptionSelectedAnimation = useAnimatedStyle(() => {
-    const borderColor = interpolateColor(
-      animationProgress.value,
-      [0, 1],
-      [BORDER_COLOR, SELECTED_BORDER_COLOR]
-    );
-    const backgroundColor = interpolateColor(
-      animationProgress.value,
-      [0, 1],
-      ["transparent", SELECTED_BACKGROUND_COLOR]
-    );
-
-    return {
-      borderColor,
-      backgroundColor,
-    };
-  }, []);
-  return (
-    <Animated.View
-      style={[
-        filterOptionSelectedAnimation,
-        // filterCardAnimation,
-        {
-          borderColor: BORDER_COLOR,
-          borderWidth: 1,
-          borderRadius: verticalScale(50),
-          height: verticalScale(35),
-          justifyContent: "center",
-          marginTop: verticalScale(17),
-          marginRight: horizontalScale(8),
-          // marginLeft: "auto",
-        },
-      ]}
-      onLayout={measure}
-    >
-      <TouchableOpacity
-        activeOpacity={0.5}
-        onPress={() => onFilterPress(label)}
-      >
-        <Text
-          style={{
-            color: "white",
-            paddingHorizontal: horizontalScale(12),
-            fontFamily: themeContext.fontNames.SPOTIFY_REGULAR,
-          }}
-        >
-          {label}
-        </Text>
-      </TouchableOpacity>
-    </Animated.View>
-  );
-};
-
 export default YourLibrary;
-
-const styles = StyleSheet.create({});

@@ -1,36 +1,16 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  PixelRatio,
-  Dimensions,
-} from "react-native";
-import React, { useState } from "react";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useContext, useState } from "react";
 
-import {
-  horizontalScale,
-  verticalScale,
-  moderateScale,
-} from "../utils/Dimensions";
-import { useFonts } from "expo-font";
+import { verticalScale } from "../utils/Dimensions";
+import { ThemeContext } from "../utils/ThemeContext";
+import Text from "../Abstracts/Text";
 
 // how to give dynamic font sizes
 
 const Card = ({ image, title }) => {
   const [pressing, setPressing] = useState(false);
-  const size = PixelRatio.getPixelSizeForLayoutSize();
+  const themeContext = useContext(ThemeContext).theme;
 
-  const [fontsLoaded] = useFonts({
-    "Spotify-Bold": require("../assets/fonts/Gotham-Bold.otf"),
-    "Spotify-Light": require("../assets/fonts/Gotham-Light.otf"),
-    "s-m": require("../assets/fonts/Gotham-Medium.ttf"),
-    "s-b": require("../assets/fonts/Gotham-Book.ttf"),
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
   return (
     <TouchableOpacity
       activeOpacity={0.5}
@@ -76,7 +56,7 @@ const Card = ({ image, title }) => {
             color: "white",
             marginLeft: 15,
             fontSize: verticalScale(13),
-            fontFamily: "s-m",
+            fontFamily: themeContext.fontNames.SPOTIFY_MEDIUM,
           }}
         >
           {title}

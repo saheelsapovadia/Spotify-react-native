@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Image, TouchableOpacity } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import { horizontalScale, verticalScale } from "../utils/Dimensions";
 import {
   GestureHandlerRootView,
@@ -11,17 +11,18 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-
+import Text from "../Abstracts/Text";
 // icons
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
-import { useFonts } from "expo-font";
+import { ThemeContext } from "../utils/ThemeContext";
 
 const SWIPE_GREEN_COLOR = "rgba(30,215,96,1)";
 const SWIPE_GREY_COLOR = "rgba(127,127,127,1)";
 
 const LibraryList = ({ setModalDetails, setShowModal }) => {
+  const themeContext = useContext(ThemeContext).theme;
   const [data, setData] = useState([
     {
       title: "BTS",
@@ -58,11 +59,13 @@ const LibraryList = ({ setModalDetails, setShowModal }) => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        marginVertical: verticalScale(50),
-        backgroundColor: "#1E1E1E",
-      }}
+      style={[
+        {
+          flex: 1,
+          marginVertical: verticalScale(50),
+        },
+        { ...themeContext.screens },
+      ]}
     >
       {data != undefined &&
         data.map((row, index) => {
@@ -95,12 +98,7 @@ const Row = ({
   setShowModal,
   pin,
 }) => {
-  const [fontsLoaded] = useFonts({
-    "Spotify-Bold": require("../assets/fonts/Gotham-Bold.otf"),
-    "Spotify-Light": require("../assets/fonts/Gotham-Light.otf"),
-    "s-m": require("../assets/fonts/Gotham-Medium.ttf"),
-    "s-b": require("../assets/fonts/Gotham-Book.ttf"),
-  });
+  const themeContext = useContext(ThemeContext).theme;
   const [pinState, setPinState] = useState(pin);
 
   const detailsModal = (data) => {
@@ -130,9 +128,6 @@ const Row = ({
     };
   }, []);
 
-  if (!fontsLoaded) {
-    return null;
-  }
   return (
     <GestureHandlerRootView>
       <View
@@ -151,12 +146,12 @@ const Row = ({
               style={[
                 swipeAnimationStyles,
                 {
-                  backgroundColor: "#1E1E1E",
                   flexDirection: "row",
                   paddingHorizontal: horizontalScale(12),
                   alignItems: "center",
                   position: "relative",
                 },
+                { ...themeContext.screens },
               ]}
               onPress={() => console.log("sda")}
             >
@@ -185,13 +180,16 @@ const Row = ({
                   style={{
                     color: "white",
                     fontSize: horizontalScale(15),
-                    fontFamily: "s-b",
+                    fontFamily: themeContext.fontNames.SPOTIFY_REGULAR,
                   }}
                 >
                   {title}
                 </Text>
                 <Text
-                  style={{ color: "rgba(160,160,160,1)", fontFamily: "s-b" }}
+                  style={{
+                    color: "rgba(160,160,160,1)",
+                    fontFamily: themeContext.fontNames.SPOTIFY_REGULAR,
+                  }}
                 >
                   {artist}
                 </Text>
@@ -213,7 +211,7 @@ const Row = ({
                     color="#A3A1A1"
                     style={{
                       alignSelf: "center",
-                      color: SWIPE_GREEN_COLOR,
+                      color: themeContext.yourlibrary.pin,
                       marginLeft: "auto",
                       marginRight: horizontalScale(15),
                     }}
@@ -237,7 +235,9 @@ const Row = ({
           <View
             style={{
               flex: 1,
-              backgroundColor: pinState ? SWIPE_GREY_COLOR : SWIPE_GREEN_COLOR,
+              backgroundColor: pinState
+                ? themeContext.yourlibrary.unpin
+                : themeContext.yourlibrary.pin,
               position: "absolute",
               height: "100%",
               width: "100%",

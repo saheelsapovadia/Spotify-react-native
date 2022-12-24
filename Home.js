@@ -4,9 +4,9 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+
 import React, { useContext } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Card from "./Components/Card";
@@ -22,14 +22,22 @@ import MusicControlPanel from "./Components/MusicControlPanel";
 // theme
 import { ThemeContext } from "./utils/ThemeContext";
 import ScreenBottomMargin from "./utils/Components/ScreenBottomMargin";
+import Text from "./Abstracts/Text";
 
 // touch effects
 const HEADING_FONT_SIZE = horizontalScale(22);
 const HEADING_FONT_SIZE_SUB = horizontalScale(12);
-const Home = () => {
-  const themeContext = useContext(ThemeContext);
-  const renderItem = ({ item }) => <BigCard card={item} />;
 
+// onload animation
+// first icons and bottonbar
+// second heading
+// third cards with loading placeholders
+// fourth card images and top linear gradient
+
+const Home = () => {
+  const themeContext = useContext(ThemeContext).theme;
+  const renderItem = ({ item }) => <BigCard card={item} />;
+  console.log("themmmee homee", themeContext.home);
   return (
     <View style={[{ flex: 1 }]}>
       <ScrollView

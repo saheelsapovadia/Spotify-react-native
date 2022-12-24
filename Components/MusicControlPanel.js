@@ -1,8 +1,8 @@
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, View } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { horizontalScale, verticalScale } from "../utils/Dimensions";
 import { MusicContext } from "./MusicContext/MusicContext";
-
+import Text from "../Abstracts/Text";
 // icons
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from "react-native-vector-icons/Ionicons";
