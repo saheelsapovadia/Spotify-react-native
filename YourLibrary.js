@@ -1,16 +1,12 @@
 import {
   Image,
   ScrollView,
-  StyleSheet,
-  Text,
   View,
   StatusBar,
-  FlatList,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { horizontalScale, verticalScale } from "./utils/Dimensions";
-import LibraryRowCard from "./Components/LibraryRowCard";
 import LibraryDetailModal from "./Components/LibraryDetailModal";
 import LibraryList from "./Components/LibraryList";
 // Icons
@@ -27,7 +23,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { useFonts } from "expo-font";
+import MusicControlPanel from "./Components/MusicControlPanel";
+import { ThemeContext } from "./utils/ThemeContext";
+import Text from "./Abstracts/Text";
 
 const BORDER_COLOR = "rgba(127,127,127,1)";
 const SELECTED_BACKGROUND_COLOR = "rgba(20,132,60,1)";
@@ -35,8 +33,6 @@ const SELECTED_BORDER_COLOR = "rgba(41,178,90,1)";
 const SELECTED_2_BACKGROUND_COLOR = "rgba(19,97,47,1)";
 
 // Design the row cards better
-// ADD FONTS
-// Add more images and data
 
 // filter rows logic
 // swap pins to top in v2
@@ -44,12 +40,7 @@ const SELECTED_2_BACKGROUND_COLOR = "rgba(19,97,47,1)";
 // deadline - 17 dec
 
 const YourLibrary = () => {
-  const [fontsLoaded] = useFonts({
-    "Spotify-Bold": require("./assets/fonts/Gotham-Bold.otf"),
-    "Spotify-Light": require("./assets/fonts/Gotham-Light.otf"),
-    "s-m": require("./assets/fonts/Gotham-Medium.ttf"),
-    "s-b": require("./assets/fonts/Gotham-Book.ttf"),
-  });
+  const themeContext = useContext(ThemeContext).theme;
 
   const [showModal, setShowModal] = useState(false);
   const [modalDetails, setModalDetails] = useState({
@@ -66,13 +57,6 @@ const YourLibrary = () => {
   const filterCrossWidth = useSharedValue(0);
   const filterCrossMarginLeft = useState(0);
 
-  const filterCrossAnimation = useAnimatedStyle(() => {
-    return {
-      opacity: filterCrossOpacity.value,
-      width: filterCrossWidth.value,
-      marginRight: filterCrossMarginLeft.value,
-    };
-  }, []);
   const filterOptionsAnimation = useAnimatedStyle(() => {
     return {
       marginLeft: filterCrossMarginLeft.value,
@@ -118,12 +102,15 @@ const YourLibrary = () => {
     const borderColor = interpolateColor(
       playlistAnimationProgress.value,
       [0, 1],
-      [BORDER_COLOR, SELECTED_BORDER_COLOR]
+      [
+        themeContext.yourlibrary.filterBorder,
+        themeContext.yourlibrary.selectedFilterBorder,
+      ]
     );
     const backgroundColor = interpolateColor(
       playlistAnimationProgress.value,
       [0, 1],
-      ["transparent", SELECTED_2_BACKGROUND_COLOR]
+      ["transparent", themeContext.yourlibrary.selectedSubFilterBackground]
     );
     return {
       borderColor,
@@ -136,16 +123,20 @@ const YourLibrary = () => {
     return filterActive ? 1 : 0;
   }, [filterActive]);
 
+  console.log("sasa", themeContext.yourlibrary);
   const filterOptionSelectedAnimation = useAnimatedStyle(() => {
     const borderColor = interpolateColor(
       animationProgress.value,
       [0, 1],
-      [BORDER_COLOR, SELECTED_BORDER_COLOR]
+      [
+        themeContext.yourlibrary.filterBorder,
+        themeContext.yourlibrary.selectedFilterBorder,
+      ]
     );
     const backgroundColor = interpolateColor(
       animationProgress.value,
       [0, 1],
-      ["transparent", SELECTED_BACKGROUND_COLOR]
+      ["transparent", themeContext.yourlibrary.selectedFilterBackground]
     );
 
     return {
@@ -154,13 +145,10 @@ const YourLibrary = () => {
     };
   }, []);
 
-  if (!fontsLoaded) {
-    return null;
-  }
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <ScrollView
-        style={{ flex: 1, backgroundColor: "#1E1E1E" }}
+        style={[{ flex: 1 }, { ...themeContext.screens }]}
         contentContainerStyle={{ flexGrow: 1 }}
       >
         <StatusBar translucent backgroundColor="transparent" />
@@ -188,7 +176,7 @@ const YourLibrary = () => {
               marginLeft: horizontalScale(10),
               fontSize: horizontalScale(24),
               color: "white",
-              fontFamily: "Spotify-Bold",
+              fontFamily: themeContext.fontNames.SPOTIFY_BOLD,
               fontWeight: "500",
             }}
           >
@@ -292,7 +280,7 @@ const YourLibrary = () => {
                   style={{
                     color: "white",
                     paddingHorizontal: horizontalScale(12),
-                    fontFamily: "s-b",
+                    fontFamily: themeContext.fontNames.SPOTIFY_REGULAR,
                   }}
                 >
                   Playlists
@@ -305,7 +293,6 @@ const YourLibrary = () => {
               <>
                 <Animated.View
                   style={[
-                    // filterOptionSelectedAnimation,
                     {
                       borderColor: BORDER_COLOR,
                       borderWidth: 1,
@@ -314,7 +301,6 @@ const YourLibrary = () => {
                       justifyContent: "center",
                       marginTop: verticalScale(17),
                       marginRight: horizontalScale(8),
-                      // marginLeft: "auto",
                     },
                   ]}
                   entering={FadeIn.delay(300)}
@@ -328,6 +314,7 @@ const YourLibrary = () => {
                       style={{
                         color: "white",
                         paddingHorizontal: horizontalScale(12),
+                        fontFamily: themeContext.fontNames.SPOTIFY_REGULAR,
                       }}
                     >
                       Artists
@@ -336,7 +323,6 @@ const YourLibrary = () => {
                 </Animated.View>
                 <Animated.View
                   style={[
-                    // filterOptionSelectedAnimation,
                     {
                       borderColor: BORDER_COLOR,
                       borderWidth: 1,
@@ -345,7 +331,6 @@ const YourLibrary = () => {
                       justifyContent: "center",
                       marginTop: verticalScale(17),
                       marginRight: horizontalScale(8),
-                      // marginLeft: "auto",
                     },
                   ]}
                   entering={FadeIn.delay(300)}
@@ -359,6 +344,7 @@ const YourLibrary = () => {
                       style={{
                         color: "white",
                         paddingHorizontal: horizontalScale(12),
+                        fontFamily: themeContext.fontNames.SPOTIFY_REGULAR,
                       }}
                     >
                       Albums
@@ -371,7 +357,6 @@ const YourLibrary = () => {
               <>
                 <Animated.View
                   style={[
-                    // filterOptionSelectedAnimation,
                     playlistAnimation,
                     {
                       borderColor: BORDER_COLOR,
@@ -381,7 +366,6 @@ const YourLibrary = () => {
                       justifyContent: "center",
                       marginTop: verticalScale(17),
                       marginRight: horizontalScale(8),
-                      // marginLeft: "auto",
                     },
                   ]}
                   entering={SlideInRight.delay(300)}
@@ -394,6 +378,7 @@ const YourLibrary = () => {
                       style={{
                         color: "white",
                         paddingHorizontal: horizontalScale(12),
+                        fontFamily: themeContext.fontNames.SPOTIFY_REGULAR,
                       }}
                     >
                       By you
@@ -406,7 +391,6 @@ const YourLibrary = () => {
                   <>
                     <Animated.View
                       style={[
-                        // filterOptionSelectedAnimation,
                         {
                           borderColor: BORDER_COLOR,
                           borderWidth: 1,
@@ -415,7 +399,6 @@ const YourLibrary = () => {
                           justifyContent: "center",
                           marginTop: verticalScale(17),
                           marginRight: horizontalScale(8),
-                          // marginLeft: "auto",
                         },
                       ]}
                       entering={SlideInRight.delay(300)}
@@ -428,6 +411,7 @@ const YourLibrary = () => {
                           style={{
                             color: "white",
                             paddingHorizontal: horizontalScale(12),
+                            fontFamily: themeContext.fontNames.SPOTIFY_REGULAR,
                           }}
                         >
                           By Spotify
@@ -440,12 +424,6 @@ const YourLibrary = () => {
             ) : (
               <></>
             )}
-            {/* <FilterCard
-              label={"Playlists"}
-              onFilterPress={onFilterPress}
-              filterActive={filterActive}
-              filterActiveMode={filterActiveMode}
-            /> */}
           </Animated.View>
         </View>
         <LibraryList
@@ -460,96 +438,9 @@ const YourLibrary = () => {
           showModal={showModal}
         />
       )}
-    </>
-  );
-};
-
-const FilterCard = ({
-  label,
-  filterActive,
-  onFilterPress,
-  filterActiveMode,
-}) => {
-  const animationProgress = useDerivedValue(() => {
-    console.log("animation progress", filterActive);
-    return filterActive ? 1 : 0;
-  }, [filterActive]);
-
-  const width = useSharedValue("auto");
-
-  const filterCardAnimation = useAnimatedStyle(() => {
-    return {
-      width: width.value,
-    };
-  }, []);
-
-  const [vWidth, setVWidth] = useState(0);
-  const measure = ({ nativeEvent }) => setVWidth(nativeEvent.layout.width);
-  useEffect(() => {
-    console.log(vWidth);
-  }, [vWidth]);
-
-  useEffect(() => {
-    if (filterActiveMode[label]) {
-      width.value = withTiming(vWidth, { duration: 200 });
-    } else {
-      width.value = withTiming(0, { duration: 200 });
-    }
-  }, [filterActiveMode]);
-
-  const filterOptionSelectedAnimation = useAnimatedStyle(() => {
-    const borderColor = interpolateColor(
-      animationProgress.value,
-      [0, 1],
-      [BORDER_COLOR, SELECTED_BORDER_COLOR]
-    );
-    const backgroundColor = interpolateColor(
-      animationProgress.value,
-      [0, 1],
-      ["transparent", SELECTED_BACKGROUND_COLOR]
-    );
-
-    return {
-      borderColor,
-      backgroundColor,
-    };
-  }, []);
-  return (
-    <Animated.View
-      style={[
-        filterOptionSelectedAnimation,
-        // filterCardAnimation,
-        {
-          borderColor: BORDER_COLOR,
-          borderWidth: 1,
-          borderRadius: verticalScale(50),
-          height: verticalScale(35),
-          justifyContent: "center",
-          marginTop: verticalScale(17),
-          marginRight: horizontalScale(8),
-          // marginLeft: "auto",
-        },
-      ]}
-      onLayout={measure}
-    >
-      <TouchableOpacity
-        activeOpacity={0.5}
-        onPress={() => onFilterPress(label)}
-      >
-        <Text
-          style={{
-            color: "white",
-            paddingHorizontal: horizontalScale(12),
-            fontFamily: "s-b",
-          }}
-        >
-          {label}
-        </Text>
-      </TouchableOpacity>
-    </Animated.View>
+      <MusicControlPanel name={"your library"} />
+    </View>
   );
 };
 
 export default YourLibrary;
-
-const styles = StyleSheet.create({});

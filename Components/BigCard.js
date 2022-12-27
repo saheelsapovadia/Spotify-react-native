@@ -1,11 +1,14 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useContext, useState } from "react";
 import { horizontalScale, verticalScale } from "../utils/Dimensions";
+import { ThemeContext } from "../utils/ThemeContext";
+import Text from "../Abstracts/Text";
 
 // horizontal scroll
 
 const BigCard = ({ card }) => {
   const [pressing, setPressing] = useState(false);
+  const themeContext = useContext(ThemeContext).theme;
   return (
     <TouchableOpacity
       activeOpacity={0.5}
@@ -25,7 +28,12 @@ const BigCard = ({ card }) => {
         source={card.image}
       ></Image>
       <Text
-        style={{ color: "rgba(167,167,167, 1)", marginTop: verticalScale(6) }}
+        style={{
+          color: "rgba(167,167,167, 1)",
+          marginTop: verticalScale(6),
+          fontSize: horizontalScale(13),
+          fontFamily: themeContext.fontNames.SPOTIFY_REGULAR,
+        }}
       >
         {card.title}
       </Text>

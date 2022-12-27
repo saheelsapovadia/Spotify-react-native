@@ -1,6 +1,6 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import React from "react";
-import { horizontalScale, verticalScale } from "../utils/Dimensions";
+import { horizontalScale } from "../utils/Dimensions";
 import {
   GestureHandlerRootView,
   PanGestureHandler,
@@ -10,6 +10,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
+import Text from "../Abstracts/Text";
 
 const LibraryRowCard = ({
   artist,

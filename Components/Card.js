@@ -1,31 +1,22 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  PixelRatio,
-  Dimensions,
-} from "react-native";
-import React, { useState } from "react";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useContext, useState } from "react";
 
-import {
-  horizontalScale,
-  verticalScale,
-  moderateScale,
-} from "../utils/Dimensions";
+import { verticalScale } from "../utils/Dimensions";
+import { ThemeContext } from "../utils/ThemeContext";
+import Text from "../Abstracts/Text";
 
 // how to give dynamic font sizes
 
 const Card = ({ image, title }) => {
   const [pressing, setPressing] = useState(false);
-  const size = PixelRatio.getPixelSizeForLayoutSize();
+  const themeContext = useContext(ThemeContext).theme;
+
   return (
     <TouchableOpacity
       activeOpacity={0.5}
       style={{
         flexDirection: "row",
-        height: verticalScale(60),
+        height: verticalScale(55),
         // height: 60,
         width: "48%",
         transform: [{ scale: pressing ? 0.99 : 1 }],
@@ -41,7 +32,7 @@ const Card = ({ image, title }) => {
         */}
       <Image
         style={{
-          height: verticalScale(60),
+          height: verticalScale(55),
           // height: 60,
           borderBottomLeftRadius: 6,
           borderTopLeftRadius: 6,
@@ -64,7 +55,8 @@ const Card = ({ image, title }) => {
           style={{
             color: "white",
             marginLeft: 15,
-            fontSize: verticalScale(15),
+            fontSize: verticalScale(13),
+            fontFamily: themeContext.fontNames.SPOTIFY_MEDIUM,
           }}
         >
           {title}

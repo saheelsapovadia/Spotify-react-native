@@ -1,17 +1,9 @@
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  Touchable,
-  View,
-} from "react-native";
-import React, { useEffect } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import React, { useContext, useEffect } from "react";
 import { horizontalScale, verticalScale } from "../utils/Dimensions";
 import {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import Animated from "react-native-reanimated";
@@ -19,6 +11,8 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import IoniconsIcon from "react-native-vector-icons/Ionicons";
+import Text from "../Abstracts/Text";
+import { ThemeContext } from "../utils/ThemeContext";
 
 // fonts
 
@@ -29,6 +23,7 @@ const LibraryDetailModal = ({
   setShowModal,
   showModal,
 }) => {
+  const themeContext = useContext(ThemeContext).theme;
   const opacity = useSharedValue(0);
   const transform = useSharedValue(50);
   const animatedStyles = useAnimatedStyle(() => {
@@ -50,7 +45,6 @@ const LibraryDetailModal = ({
     opacity.value = withTiming(1, { duration: 300 });
     transform.value = withTiming(0, { duration: 200 });
   }, []);
-
   return (
     <Animated.View
       style={[
@@ -58,10 +52,10 @@ const LibraryDetailModal = ({
           position: "absolute",
           width: "100%",
           height: "100%",
-          backgroundColor: "black",
           justifyContent: "flex-end",
           paddingBottom: verticalScale(20),
         },
+        { ...themeContext.screens },
         animatedStyles,
         bottomTranslate,
       ]}
