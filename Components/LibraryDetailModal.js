@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View, BackHandler } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { horizontalScale, verticalScale } from "../utils/Dimensions";
 import {
@@ -13,6 +13,7 @@ import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import Text from "../Abstracts/Text";
 import { ThemeContext } from "../utils/ThemeContext";
+import { DetailViewContext } from "../Contexts/DetailViewContext";
 
 // fonts
 
@@ -24,6 +25,25 @@ const LibraryDetailModal = ({
   showModal,
 }) => {
   const themeContext = useContext(ThemeContext).theme;
+  const detailViewContext = useContext(DetailViewContext);
+
+  // back pressed
+  useEffect(() => {
+    const backAction = () => {
+      console.log("back pressed");
+      detailViewContext.setShow(null);
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
+
   const opacity = useSharedValue(0);
   const transform = useSharedValue(50);
   const animatedStyles = useAnimatedStyle(() => {
@@ -63,7 +83,7 @@ const LibraryDetailModal = ({
       <Pressable
         style={{ position: "absolute", width: "100%", height: "100%" }}
         onPress={() => {
-          setShowModal(false);
+          setShowModal(null);
         }}
       ></Pressable>
       <Animated.Image

@@ -10,6 +10,9 @@ import Search from "./Search";
 import MusicContextProvider from "./Components/MusicContext/MusicContext";
 import { ThemeContext, ThemeContextProvider } from "./utils/ThemeContext";
 import { useContext } from "react";
+import DetailViewContextProvider, {
+  DetailViewContext,
+} from "./Contexts/DetailViewContext";
 
 // Improve asthetics design, animation later on - 18
 // deadline saturday 2pm search screen and beta launch on github and linkedin after 5km run
@@ -28,9 +31,11 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <ThemeContextProvider>
-      <MusicContextProvider>
-        <Navigation />
-      </MusicContextProvider>
+      <DetailViewContextProvider>
+        <MusicContextProvider>
+          <Navigation />
+        </MusicContextProvider>
+      </DetailViewContextProvider>
     </ThemeContextProvider>
   );
 }

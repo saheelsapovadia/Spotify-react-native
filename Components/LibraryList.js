@@ -17,6 +17,7 @@ import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import { ThemeContext } from "../utils/ThemeContext";
+import { DetailViewContext } from "../Contexts/DetailViewContext";
 
 const SWIPE_GREEN_COLOR = "rgba(30,215,96,1)";
 const SWIPE_GREY_COLOR = "rgba(127,127,127,1)";
@@ -99,11 +100,11 @@ const Row = ({
   pin,
 }) => {
   const themeContext = useContext(ThemeContext).theme;
+  const detailViewContext = useContext(DetailViewContext);
   const [pinState, setPinState] = useState(pin);
 
   const detailsModal = (data) => {
-    setModalDetails(data);
-    setShowModal(true);
+    detailViewContext.setShow(data);
   };
 
   const translateX = useSharedValue(0);
